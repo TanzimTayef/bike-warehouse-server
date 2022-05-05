@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 app.get("/", (req, res) => {
-    res.send("Bike warehouse running", PORT);
+    res.send("Bike warehouse running");
 });
 
 app.listen(PORT, () => {
