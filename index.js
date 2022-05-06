@@ -8,12 +8,12 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
-// middleware
+// middleware                     
 app.use(cors());
 app.use(express.json());
 
 // connect with mongodb
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vdf6i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://bikeWarehouse:9mAqKodBszeswj4H@cluster0.vdf6i.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -23,14 +23,6 @@ async function run() {
   try {
     await client.connect();
     const stockCollection = client.db("bikeWarehouse").collection("stocks");
-
- // single item  
-    app.get("/stocks/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const stock = await stockCollection.findOne(query);
-      res.send(stock);
-    });
 
     // load all data
     app.get("/stocks", async (req, res) => {
@@ -46,6 +38,18 @@ async function run() {
       const result = await stockCollection.insertOne(newStock);
       res.send(result);
     });
+
+    // single item  
+    app.get("/stocks/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: ObjectId(id)};
+      const stock = await stockCollection.findOne(query);
+      res.send(stock);
+    });
+
+
+
+
   } finally {
   }
 }
