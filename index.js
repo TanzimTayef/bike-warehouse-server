@@ -47,6 +47,13 @@ async function run() {
       res.send(stock);
     });
 
+    // to add
+    app.post("/stocks", async (req, res) => {
+      const newStocks = req.body;
+      const result = stockCollection.insertOne(newStocks)
+      req.send(result)
+    })
+
 
 
 
