@@ -50,10 +50,39 @@ async function run() {
     // to add
     app.post("/stocks", async (req, res) => {
       const newStocks = req.body;
-      const result = stockCollection.insertOne(newStocks)
+      const result = await stockCollection.insertOne(newStocks)
       req.send(result)
     })
 
+
+  // delete data 
+    app.delete("/stocks/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const result = await stockCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
+
+    app.put("/stocks/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const updateQuantity = parseInt(req.body.newQuantity);
+      console.log(req.body)
+      console.log(updateQuantity)
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          quantity: updateQuantity
+        },
+      };
+      const result = await stockCollection.updateOne(query, updateDoc, options);
+      console.log(updateDoc)
+      res.send(result);
+      console.log(result)
+    })
 
 
 
